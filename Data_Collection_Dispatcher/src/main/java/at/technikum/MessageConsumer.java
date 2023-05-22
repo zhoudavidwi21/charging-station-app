@@ -49,13 +49,19 @@ public class MessageConsumer {
         }
     }
 
-    //TODO: implement extract message
+    //TODO: implement extract customer id
     // check message format
+    // if message format is correct, extract customer id
+    // if message format is incorrect, return null
     private String extractMessage(String message) {
         String prefix = message.substring(0, message.indexOf(":"));
 
         String messageWithoutPrefix = message.substring(message.indexOf(":") + 1);
 
         return prefix + ": " + messageWithoutPrefix;
+    }
+
+    private String customerIdToJson(String customerId) {
+        return "{\"customerId\": \"" + customerId + "\"}";
     }
 }
