@@ -1,4 +1,4 @@
-package at.technikum;
+package at.technikum.dto;
 
 public class Station {
 

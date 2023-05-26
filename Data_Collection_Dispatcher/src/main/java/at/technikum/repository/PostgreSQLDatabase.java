@@ -1,10 +1,9 @@
-package at.technikum;
+package at.technikum.repository;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
-public class Database {
+public class PostgreSQLDatabase implements Database {
+    private Connection connection;
 
     private static final String DRIVER = "postgresql";
     private static final String HOST = "localhost";
@@ -13,7 +12,11 @@ public class Database {
     private static final String USERNAME = "postgres";
     private static final String PASSWORD = "postgres";
 
-    public static Connection getConnection()  throws SQLException {
+    public PostgreSQLDatabase() throws SQLException {
+        connection = getConnection();
+    }
+
+    private static Connection getConnection()  throws SQLException {
         return DriverManager.getConnection(getURL());
     }
 
@@ -25,5 +28,16 @@ public class Database {
                 DATABASE,
                 USERNAME,
                 PASSWORD);
+    }
+
+    @Override
+    public ResultSet executeQuery(String query) throws SQLException {
+        PreparedStatement statement = connection.prepareStatement(query);
+        return statement.executeQuery();
+    }
+
+    @Override
+    public void close() throws Exception {
+        connection.close();
     }
 }
