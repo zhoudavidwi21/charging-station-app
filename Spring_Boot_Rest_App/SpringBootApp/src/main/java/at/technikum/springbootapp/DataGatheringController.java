@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -38,7 +41,14 @@ public class DataGatheringController {
     public ResponseEntity<String> startDataGathering(@PathVariable("customerId") String customerId) throws IOException {
         Data data = new Data(customerId);
         service.addData(data);
-        rabbitTemplate.convertAndSend("data_collection_dispatcher_queue", data);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(data);
+            rabbitTemplate.convertAndSend(QUEUE_NAME, json);
+        } catch (JsonProcessingException e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Fehler beim Konvertieren des Datenobjekts in JSON.");
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body("Data gathering started for customer ID: " + customerId);
     }
 
@@ -54,6 +64,15 @@ public class DataGatheringController {
 }
 
 
+    /*
+       @PostMapping("/{customerId}")
+    public ResponseEntity<String> startDataGathering(@PathVariable("customerId") String customerId) throws IOException {
+        Data data = new Data(customerId);
+        service.addData(data);
+        rabbitTemplate.convertAndSend("data_collection_dispatcher_queue", data);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Data gathering started for customer ID: " + customerId);
+    }
+     */
 
     /*
     @PostMapping("/{customerId}")
