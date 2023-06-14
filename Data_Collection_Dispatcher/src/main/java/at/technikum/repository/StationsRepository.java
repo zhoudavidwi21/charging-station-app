@@ -40,7 +40,7 @@ public class StationsRepository implements Repository<Station> {
     @Override
     public int getNumberOfStations() throws Exception {
 
-        String query = "SELECT COUNT(*) FROM stations";
+        String query = "SELECT COUNT(*) FROM station";
         ResultSet rs = database.executeQuery(query);
         rs.next();
         return rs.getInt(1);

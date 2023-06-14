@@ -14,4 +14,6 @@ public class Main {
         System.out.println("Starting DataCollectionDispatcherApp...");
         app.run();
     }
+
+
 }
