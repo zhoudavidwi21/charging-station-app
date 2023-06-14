@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeoutException;
 
+// basic publish/consume source: https://www.rabbitmq.com/tutorials/tutorial-one-java.html
 public class RabbitMQService implements MessagingQueue, AutoCloseable {
     private static final String HOST = "localhost";
     private static final int PORT = 30003;

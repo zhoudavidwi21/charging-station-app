@@ -3,55 +3,79 @@ package at.technikum.service;
 import at.technikum.dto.Station;
 import at.technikum.repository.Repository;
 import at.technikum.util.JsonHelper;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.fasterxml.jackson.core.io.NumberInput.parseInt;
+
 public class DataCollectionDispatcherApp implements MessageHandler {
-    private static final String INPUT_QUEUE_NAME = "red_queue";
-    private static final String OUTPUT_QUEUE_NAME_1 = "green_queue";
-    private static final String OUTPUT_QUEUE_NAME_2 = "purple_queue";
+    private static final String INPUT_QUEUE_NAME = "data_collection_dispatcher_queue";
+    private static final String OUTPUT_QUEUE_NAME_1 = "station_data_collector_queue";
+    private static final String OUTPUT_QUEUE_NAME_2 = "data_collection_receiver_queue";
 
-    private MessagingQueue messagingQueue;
+    private final MessagingQueue messagingQueue;
 
-    private Repository<Station> stationRepository;
+    private final Repository<Station> stationsRepository;
 
     public DataCollectionDispatcherApp(Repository<Station> repository) throws Exception {
         this.messagingQueue = new RabbitMQService(this);
-        this.stationRepository = repository;
+        this.stationsRepository = repository;
     }
 
     @Override
     public void handleMessage(String message) throws Exception {
-        // Custom logic to handle the received message
-        // TODO: dependent on format
-        // if message is a number, send to data collection receiver
-        startDataCollectionJob();
+        Map<String, Object> messageObject = JsonHelper.fromJson(message, new TypeReference<>() {});
+        Object customerIdObj = messageObject.get("customerId");
+
+        if (customerIdObj instanceof String customerIdStr) {
+
+            if (isNumeric(customerIdStr)) {
+                int customerId = Integer.parseInt(customerIdStr);
+                if (customerId > 0) {
+                    startDataCollectionJob(customerId);
+                    return; // Exit the method since data collection job is started
+                }
+            }
+        }
+
+        // If the customerId is not set or not a valid number, log a message
+        System.out.println("Invalid message: " + message);
     }
 
-    private void startDataCollectionJob() throws Exception {
-        sendToStationDataCollector();
-        sendToDataCollectionReceiver();
+    private boolean isNumeric(String str) {
+        return str.matches("-?\\d+(\\.\\d+)?");
+    }
+    private void startDataCollectionJob(int customerId) throws Exception {
+        sendToStationDataCollector(customerId);
+        sendToDataCollectionReceiver(customerId);
     }
 
-    private void sendToStationDataCollector() throws Exception {
+    private void sendToStationDataCollector(int customerId) throws Exception {
         // Sends data to station data collector
-        List<Station> stations = stationRepository.getAllStations();
+        List<Station> stations = stationsRepository.getAllStations();
+
         for (Station station : stations) {
-            String message = JsonHelper.toJson(station);
+            Map<String, Object> messageObject = new HashMap<>();
+            messageObject.put("customerId", customerId);
+            messageObject.put("station", station);
+            String message = JsonHelper.toJson(messageObject);
             messagingQueue.publish(OUTPUT_QUEUE_NAME_1, message);
         }
     }
 
-    private void sendToDataCollectionReceiver() throws Exception {
+    private void sendToDataCollectionReceiver(int customerId) throws Exception {
         // Create a JSON object for numMessages
-        int numberOfMessages = stationRepository.getNumberOfStations();
-        Map<String, Object> numberOfMessagesObject = new HashMap<>();
-        numberOfMessagesObject.put("numMessages", numberOfMessages);
-        String numberOfMessagesJson = JsonHelper.toJson(numberOfMessagesObject);
+        int numberOfMessages = stationsRepository.getNumberOfStations();
+        Map<String, Object> messageObject = new HashMap<>();
+        messageObject.put("customerId", customerId);
+        messageObject.put("numMessages", numberOfMessages);
+        String messageJson = JsonHelper.toJson(messageObject);
 
         // Sends data to station data collector
-        messagingQueue.publish(OUTPUT_QUEUE_NAME_2, numberOfMessagesJson);
+        messagingQueue.publish(OUTPUT_QUEUE_NAME_2, messageJson);
     }
 
 
