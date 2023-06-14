@@ -63,27 +63,3 @@ public class DataGatheringController {
     }
 }
 
-
-    /*
-       @PostMapping("/{customerId}")
-    public ResponseEntity<String> startDataGathering(@PathVariable("customerId") String customerId) throws IOException {
-        Data data = new Data(customerId);
-        service.addData(data);
-        rabbitTemplate.convertAndSend("data_collection_dispatcher_queue", data);
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Data gathering started for customer ID: " + customerId);
-    }
-     */
-
-    /*
-    @PostMapping("/{customerId}")
-    public String startDataGathering(@PathVariable String customerId) {
-        service.startDataGathering(customerId);
-        return "Data gathering started for customer ID: " + customerId;
-    }
-
-    @GetMapping("/{customerId}")
-    public String getInvoice(@PathVariable String customerId) {
-        return "Invoice PDF for customer ID: " + customerId;
-    } */
-
-
