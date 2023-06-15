@@ -7,20 +7,21 @@ public class PostgreSQLDatabase implements Database {
 
     private static final String DRIVER = "postgresql";
     private static final String HOST = "localhost";
-    private static final String PORT = "30002";
+    private String PORT;
     private static final String DATABASE = "stationdb";
     private static final String USERNAME = "postgres";
     private static final String PASSWORD = "postgres";
 
-    public PostgreSQLDatabase() throws SQLException {
+    public PostgreSQLDatabase(String PORT) throws SQLException {
+        this.PORT = PORT;
         connection = getConnection();
     }
 
-    private static Connection getConnection()  throws SQLException {
+    private Connection getConnection()  throws SQLException {
         return DriverManager.getConnection(getURL());
     }
 
-    private static String getURL() {
+    private String getURL() {
         return String.format("jdbc:%s://%s:%s/%s?user=%s&password=%s",
                 DRIVER,
                 HOST,
@@ -31,8 +32,9 @@ public class PostgreSQLDatabase implements Database {
     }
 
     @Override
-    public ResultSet executeQuery(String query) throws SQLException {
+    public ResultSet executeQuery(String query, int customerId) throws SQLException {
         PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, customerId);
         return statement.executeQuery();
     }
 

@@ -4,8 +4,7 @@ import java.util.List;
 
 public interface Repository<T>{
 
-    List<T> getAllStations() throws Exception;
+    List<T> getKwhByCustomerId(int customerId) throws Exception;
 
-    int getNumberOfStations() throws Exception;
 
 }
