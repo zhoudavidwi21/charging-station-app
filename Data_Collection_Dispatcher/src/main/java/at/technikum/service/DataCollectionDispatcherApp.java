@@ -78,9 +78,6 @@ public class DataCollectionDispatcherApp implements MessageHandler {
         messagingQueue.publish(OUTPUT_QUEUE_NAME_2, messageJson);
     }
 
-
-
-
     public void run() {
         try {
             System.out.println("App started");
