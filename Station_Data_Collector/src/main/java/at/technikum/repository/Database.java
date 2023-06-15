@@ -7,14 +7,15 @@ public abstract class Database implements AutoCloseable, ExecuteQuery {
     private Connection connection;
 
     public Database() throws SQLException {
-        connection = getConnection();
     }
 
-    private Connection getConnection()  throws SQLException {
-        return DriverManager.getConnection(getURL());
-    }
+    public abstract Connection getConnection(String hostport)  throws SQLException;
 
-    public abstract String getURL();
+    public abstract String getURL(String hostport);
+
+    public void setConnection(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public ResultSet executeQuery(String query, int customerId) throws SQLException {

@@ -27,17 +27,13 @@ public class DataCollectionDispatcherApp implements MessageHandler {
 
     @Override
     public void handleMessage(String message) throws Exception {
-        Map<String, Object> messageObject = JsonHelper.fromJson(message, new TypeReference<>() {});
-        Object customerIdObj = messageObject.get("customerId");
+        String customerIdStr = JsonHelper.extractField(message, "customerId");
 
-        if (customerIdObj instanceof String customerIdStr) {
-
-            if (isNumeric(customerIdStr)) {
-                int customerId = Integer.parseInt(customerIdStr);
-                if (customerId > 0) {
-                    startDataCollectionJob(customerId);
-                    return; // Exit the method since data collection job is started
-                }
+        if (isNumeric(customerIdStr)) {
+            int customerId = Integer.parseInt(customerIdStr);
+            if (customerId > 0) {
+                startDataCollectionJob(customerId);
+                return;
             }
         }
 
@@ -45,8 +41,12 @@ public class DataCollectionDispatcherApp implements MessageHandler {
         System.out.println("Invalid message: " + message);
     }
 
-    private boolean isNumeric(String str) {
-        return str.matches("-?\\d+(\\.\\d+)?");
+    public static boolean isNumeric(String str) {
+        if (str == null || str.isEmpty()) {
+            return false;
+        }
+        // https://stackoverflow.com/questions/15111420/how-to-check-if-a-string-contains-only-digits-in-java
+        return str.matches("\\d+");
     }
     private void startDataCollectionJob(int customerId) throws Exception {
         sendToStationDataCollector(customerId);
@@ -61,8 +61,10 @@ public class DataCollectionDispatcherApp implements MessageHandler {
             Map<String, Object> messageObject = new HashMap<>();
             messageObject.put("customerId", customerId);
             messageObject.put("station", station);
-            String message = JsonHelper.toJson(messageObject);
+            String message = JsonHelper.serialize(messageObject);
+            System.out.println("Sending...");
             messagingQueue.publish(OUTPUT_QUEUE_NAME_1, message);
+            Thread.sleep(1000);
         }
     }
 
@@ -72,19 +74,19 @@ public class DataCollectionDispatcherApp implements MessageHandler {
         Map<String, Object> messageObject = new HashMap<>();
         messageObject.put("customerId", customerId);
         messageObject.put("numMessages", numberOfMessages);
-        String messageJson = JsonHelper.toJson(messageObject);
-
+        String messageJson = JsonHelper.serialize(messageObject);
+        System.out.println("Sending...");
         // Sends data to station data collector
         messagingQueue.publish(OUTPUT_QUEUE_NAME_2, messageJson);
     }
 
     public void run() {
         try {
-            System.out.println("App started");
+            System.out.println("Data Collection Dispatcher App started");
             System.out.println("Waiting for messages in: " + INPUT_QUEUE_NAME);
             messagingQueue.consume(INPUT_QUEUE_NAME);
         } catch (Exception e) {
-            System.out.println("Error consuming data collection queue: " + e.getMessage());
+            System.out.println("Error consuming in "+ INPUT_QUEUE_NAME + ": " + e.getMessage());
         }
     }
 

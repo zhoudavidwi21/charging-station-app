@@ -1,5 +1,8 @@
 package at.technikum.dto;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Station {
 
     private int id;
@@ -7,7 +10,13 @@ public class Station {
     private Double lat;
     private Double lng;
 
-    public Station(int id, String db_url, Double lat, Double lng) {
+    public Station() {
+    }
+
+    public Station(int id,
+                   String db_url,
+                   Double lat,
+                   Double lng) {
         this.id = id;
         this.db_url = db_url;
         this.lat = lat;

@@ -35,7 +35,7 @@ public class RabbitMQService implements MessagingQueue, AutoCloseable {
     @Override
     public void consume(String queueName) throws IOException {
         channel.queueDeclare(queueName, false, false, false, null);
-
+        System.out.println("Waiting for messages...");
         // Create a consumer to handle incoming messages
         Consumer consumer = new DefaultConsumer(channel) {
             @Override
@@ -46,7 +46,9 @@ public class RabbitMQService implements MessagingQueue, AutoCloseable {
                 try {
                     messageHandler.handleMessage(message);
                 } catch (Exception e) {
-                    throw new RuntimeException(e);
+                    // Exception handling code
+                    e.printStackTrace();
+                    System.exit(1); // Exit the program with a non-zero status code
                 }
             }
         };

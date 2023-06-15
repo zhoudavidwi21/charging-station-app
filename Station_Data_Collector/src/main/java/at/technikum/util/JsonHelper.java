@@ -1,38 +1,54 @@
 package at.technikum.util;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.*;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
+
 
 // source: https://stackoverflow.com/questions/60871973/serializing-and-deserializing-json-targeting-java-classes-with-jackson
 public class JsonHelper {
-
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public static <T> T fromJson(String json, Class<T> valueType) throws IOException {
-        return objectMapper.readValue(json, valueType);
+    public static String serialize(Object object) {
+        try {
+            return objectMapper.writeValueAsString(object);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public static <T> T fromJson(String json, TypeReference<T> valueTypeRef) throws IOException {
-        return objectMapper.readValue(json, valueTypeRef);
+    public static <T> T deserialize(String json, Class<T> valueType) {
+        try {
+            return objectMapper.readValue(json, valueType);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public static <T> List<T> fromJsonToList(String json, Class<T> elementType) throws IOException {
-        JavaType type = objectMapper.getTypeFactory().constructCollectionType(List.class, elementType);
-        return objectMapper.readValue(json, type);
+    public static String extractField(String json, String fieldName) {
+        try {
+            JsonNode rootNode = objectMapper.readTree(json);
+            JsonNode fieldNode = rootNode.get(fieldName);
+            return fieldNode.asText();
+        } catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public static <K, V> Map<K, V> fromJsonToMap(String json, Class<K> keyType, Class<V> valueType) throws IOException {
-        JavaType type = objectMapper.getTypeFactory().constructMapType(Map.class, keyType, valueType);
-        return objectMapper.readValue(json, type);
-    }
-
-    public static String toJson(Object object) throws IOException {
-        return objectMapper.writeValueAsString(object);
+    public static String extractObject(String json, String fieldName) {
+        try {
+            JsonNode rootNode = objectMapper.readTree(json);
+            JsonNode fieldNode = rootNode.get(fieldName);
+            return fieldNode.toString();
+        } catch (IOException | NullPointerException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }

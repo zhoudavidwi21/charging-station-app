@@ -1,13 +1,10 @@
 package at.technikum.repository;
 
-import at.technikum.dto.CustomerStationData;
-import at.technikum.dto.Station;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerStationDataRepository implements Repository<CustomerStationData> {
+public class CustomerStationDataRepository implements Repository<Double> {
 
     private Database database;
 
@@ -16,8 +13,8 @@ public class CustomerStationDataRepository implements Repository<CustomerStation
     }
 
     @Override
-    public List<CustomerStationData> getKwhByCustomerId(int customerId) throws Exception {
-        List<CustomerStationData> customerStationData = new ArrayList<>();
+    public List<Double> getKwhByCustomerId(int customerId) throws Exception {
+        List<Double> customerStationData = new ArrayList<>();
 
         String query = "SELECT * FROM charge WHERE customer_id = ?";
         ResultSet rs = database.executeQuery(query, customerId);
@@ -25,8 +22,7 @@ public class CustomerStationDataRepository implements Repository<CustomerStation
         while (rs.next()) {
             Double kwh = rs.getDouble("kwh");
 
-            CustomerStationData customerStationData1 = new CustomerStationData(kwh);
-            customerStationData.add(customerStationData1);
+            customerStationData.add(kwh);
         }
 
         return customerStationData;
