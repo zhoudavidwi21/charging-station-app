@@ -26,15 +26,3 @@ public class DataGatheringService implements DataGatheringServiceInterface {
     }
 }
 
-
-    /* private final AmqpTemplate amqpTemplate;
-
-    @Autowired
-    public DataGatheringService(AmqpTemplate amqpTemplate) {
-        this.amqpTemplate = amqpTemplate;
-    }
-
-    public void startDataGathering(String customerId) {
-        amqpTemplate.convertAndSend("data-collection", customerId);
-        System.out.println("Data gathering started for customer ID: " + customerId);
-    } */
