@@ -20,7 +20,7 @@ import java.util.concurrent.TimeoutException;
 public class StationDataCollectionApp implements MessageHandler {
 
     private static final String INPUT_QUEUE_NAME = "station_data_collector_queue";
-    private static final String OUTPUT_QUEUE_NAME = "data_collection_receiver_queue";
+    private static final String OUTPUT_QUEUE_NAME = "data_collection_receiver_queue_2";
 
     private final MessagingQueue messagingQueue;
 

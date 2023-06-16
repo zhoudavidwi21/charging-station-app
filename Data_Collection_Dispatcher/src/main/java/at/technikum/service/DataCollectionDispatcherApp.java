@@ -14,7 +14,7 @@ import static com.fasterxml.jackson.core.io.NumberInput.parseInt;
 public class DataCollectionDispatcherApp implements MessageHandler {
     private static final String INPUT_QUEUE_NAME = "data_collection_dispatcher_queue";
     private static final String OUTPUT_QUEUE_NAME_1 = "station_data_collector_queue";
-    private static final String OUTPUT_QUEUE_NAME_2 = "data_collection_receiver_queue";
+    private static final String OUTPUT_QUEUE_NAME_2 = "data_collection_receiver_queue_1";
 
     private final MessagingQueue messagingQueue;
 
@@ -49,8 +49,9 @@ public class DataCollectionDispatcherApp implements MessageHandler {
         return str.matches("\\d+");
     }
     private void startDataCollectionJob(int customerId) throws Exception {
-        sendToStationDataCollector(customerId);
         sendToDataCollectionReceiver(customerId);
+        Thread.sleep(1000);
+        sendToStationDataCollector(customerId);
     }
 
     private void sendToStationDataCollector(int customerId) throws Exception {
