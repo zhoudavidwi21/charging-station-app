@@ -75,6 +75,11 @@ public class DataCollectionReceiverApp2 implements MessageHandler {
             pdfDataMap.put("currentTime", System.currentTimeMillis());
 
             messagingQueue.publish(OUTPUT_QUEUE_NAME, JsonHelper.serialize(pdfDataMap));
+        } else {
+            System.out.println("Customer with id " + customerId + " not found");
+            System.out.println("Skipping pdf generation");
+            System.out.println("-----------------------------------");
+            System.out.println("Waiting for messages. To exit press CTRL+C");
         }
     }
 
