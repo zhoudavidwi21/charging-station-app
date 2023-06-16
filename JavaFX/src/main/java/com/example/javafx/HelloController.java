@@ -1,6 +1,5 @@
 package com.example.javafx;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -21,13 +20,13 @@ import java.io.IOException;
 public class HelloController {
 
     @FXML
-    private TextField idTextField;
+    private TextField customerIdField;
 
     @FXML
     private Button createInvoiceButton;
 
     @FXML
-    private Button downloadInvoiceButton;
+    private Button statusInvoiceButton;
 
     @FXML
     private Button closeButton;
@@ -43,12 +42,12 @@ public class HelloController {
     @FXML
     void initialize() {
         createInvoiceButton.setOnAction(event -> {
-            String customerId = idTextField.getText();
+            String customerId = customerIdField.getText();
             startDataGathering(customerId);
         });
 
-        downloadInvoiceButton.setOnAction(event -> {
-            String customerId = idTextField.getText();
+        statusInvoiceButton.setOnAction(event -> {
+            String customerId = customerIdField.getText();
             downloadInvoice(customerId);
         });
 
@@ -58,7 +57,7 @@ public class HelloController {
         });
     }
 
-    private void startDataGathering(String customerId) {
+    public void startDataGathering(String customerId) {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url = BASE_URL + customerId;
             HttpPost httpPost = new HttpPost(url);
@@ -80,10 +79,15 @@ public class HelloController {
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == 202) {
                 // Erfolgreich gestartet
-                updateStatusLabel("Data gathering started for customer ID: " + customerId);
+                HttpEntity entity = response.getEntity();
+                String responseString = EntityUtils.toString(entity, "UTF-8");
+                System.out.println(responseString);
+                updateStatusLabel(responseString);
             } else {
                 // Fehler aufgetreten
-                updateStatusLabel("Failed to start data gathering for customer ID: " + customerId);
+//                updateStatusLabel("Failed to start data gathering for customer ID: " + customerId);
+                updateStatusLabel("Please enter a customer-ID!");
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -91,7 +95,7 @@ public class HelloController {
         }
     }
 
-    private void downloadInvoice(String customerId) {
+    public void downloadInvoice(String customerId) {
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             String url = BASE_URL + customerId;
             HttpGet httpGet = new HttpGet(url);
@@ -101,17 +105,21 @@ public class HelloController {
 
             // Statuscode überprüfen
             int statusCode = response.getStatusLine().getStatusCode();
+            HttpEntity responseEntity = response.getEntity();
+            String responseString = EntityUtils.toString(responseEntity, "UTF-8");
+            System.out.println(responseString);
+
             if (statusCode == 200) {
                 // Erfolgreich heruntergeladen
-                HttpEntity responseEntity = response.getEntity();
                 if (responseEntity != null) {
-                    String invoiceContent = EntityUtils.toString(responseEntity);
-                    // Hier können Sie die Rechnungsinformationen weiterverarbeiten
-                    updateStatusLabel("Invoice downloaded for customer ID: " + customerId);
+                    updateStatusLabel(responseString);
                 }
-            } else {
+            } else if (statusCode == 404) {
+                updateStatusLabel(responseString);
+            }   else
+            {
                 // Fehler aufgetreten
-                updateStatusLabel("Failed to download invoice for customer ID: " + customerId);
+                updateStatusLabel(responseString);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -119,17 +127,8 @@ public class HelloController {
         }
     }
 
-    private void updateStatusLabel(String message) {
+    public void updateStatusLabel(String message) {
         statusLabel.setText(message);
     }
 
-    public void createInvoice(ActionEvent actionEvent) {
-    }
-
-    public void downloadInvoice(ActionEvent actionEvent) {
-    }
-
-    public void closeApplication(ActionEvent actionEvent) {
-
-    }
 }
