@@ -9,7 +9,7 @@ import java.util.concurrent.TimeoutException;
 public class DataCollectionReceiverApp implements MessageHandler {
 
     private static final String INPUT_QUEUE_NAME = "data_collection_receiver_queue";
-    private static final String OUTPUT_QUEUE_NAME = "pdf_generator_queue
+    private static final String OUTPUT_QUEUE_NAME = "pdf_generator_queue";
 
     private final MessagingQueue messagingQueue;
 
