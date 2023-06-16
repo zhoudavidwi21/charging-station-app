@@ -5,14 +5,23 @@ import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeoutException;
 
 @RestController
@@ -25,6 +34,9 @@ public class DataGatheringController {
     private final Channel channel;
 
     private static final String QUEUE_NAME = "data_collection_dispatcher_queue";
+
+    @Autowired
+    private ResourceLoader resourceLoader;
 
     @Autowired
     public DataGatheringController(DataGatheringService service, RabbitTemplate rabbitTemplate) throws IOException, TimeoutException {
@@ -53,13 +65,22 @@ public class DataGatheringController {
     }
 
     @GetMapping("/{customerId}")
-    public String getInvoice(@PathVariable("customerId") String customerId) {
-        Data data = service.findData(customerId);
-        if (data != null) {
-            return "Invoice PDF for customer ID: " + customerId;
+    public ResponseEntity<byte[]> getInvoice(@PathVariable("customerId") String customerId) throws IOException {
+        String fileName = "customer_" + customerId + ".pdf";
+        final String OUTPUT_DIRECTORY = Paths.get(System.getProperty("user.home"), "..", "Public").toString();
+        String filePath = OUTPUT_DIRECTORY + "\\" + fileName;
+
+        File file = new File(filePath);
+        if (file.exists()) {
+            Date creationDate = new Date(file.lastModified());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedCreationDate = dateFormat.format(creationDate);
+            String response = "Invoice PDF for customer ID: " + customerId
+                    + "\nDownload Link: " + filePath
+                    + "\nCreation Date: " + formattedCreationDate;
+            return ResponseEntity.ok(response.getBytes());
         } else {
-            return "Invoice not available for customer ID: " + customerId;
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(("Invoice not available for customer ID: " + customerId).getBytes());
         }
     }
 }
-
