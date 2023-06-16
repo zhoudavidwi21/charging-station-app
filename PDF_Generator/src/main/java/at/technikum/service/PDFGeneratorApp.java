@@ -20,7 +20,7 @@ public class PDFGeneratorApp implements MessageHandler{
     private static final String OUTPUT_DIRECTORY = Paths.get(System.getProperty("user.home"), "..", "Public").toString();
     private final MessagingQueue messagingQueue;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
-    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#.##");
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("0.00");
 
     public PDFGeneratorApp() throws IOException, TimeoutException {
         this.messagingQueue = new RabbitMQService(this);
