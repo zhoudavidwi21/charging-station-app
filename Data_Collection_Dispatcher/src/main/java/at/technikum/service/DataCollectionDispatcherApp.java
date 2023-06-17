@@ -21,6 +21,7 @@ public class DataCollectionDispatcherApp implements MessageHandler {
     private final Repository<Station> stationsRepository;
 
     public DataCollectionDispatcherApp(Repository<Station> repository) throws Exception {
+        // initialized here because unknown how to pass in Main
         this.messagingQueue = new RabbitMQService(this);
         this.stationsRepository = repository;
     }
@@ -58,6 +59,7 @@ public class DataCollectionDispatcherApp implements MessageHandler {
         // Sends data to station data collector
         List<Station> stations = stationsRepository.getAllStations();
 
+        // Could be written as stream?!?
         for (Station station : stations) {
             Map<String, Object> messageObject = new HashMap<>();
             messageObject.put("customerId", customerId);
