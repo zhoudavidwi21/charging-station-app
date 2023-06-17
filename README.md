@@ -14,8 +14,8 @@ You will need to open the SpringBootApp folder in your IDE and start the applica
 
 For the other services you can try using the backend.bat (on Windows), which should automatically open the backend services.
 If that does not work you can either: 
-- a.) Open each service *(Data_Collection_Dispatcher, Data_Collection_Receiver, Station_Data_Collector, PDF_Generator)* folder in your IDE and start the application.
-- b.) Try opening the executable jar files in the *Apps* folder with `java -jar ./<service>.jar`, or via double click
+- Open each service *(Data_Collection_Dispatcher, Data_Collection_Receiver, Station_Data_Collector, PDF_Generator)* folder in your IDE and start the application.
+- Try opening the executable jar files in the *Apps* folder with `java -jar ./<service>.jar`, or via double click
 	
 
 ## Purpose
