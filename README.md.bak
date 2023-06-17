@@ -31,5 +31,9 @@ These are:
 	
 The REST API and the services in the backend communicate via a messaging queue (rabbitMQ).
 
-## Task split
-Martin Frischmann: JavaFX
+## Responsibilities
+JavaFX - Martin Frischmann
+
+SpringBootApplication/REST - Can Oezalp
+
+Backend Services - David Zhou
