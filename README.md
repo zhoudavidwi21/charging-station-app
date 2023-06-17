@@ -24,12 +24,12 @@ It generates an invoice PDF for a given customer.
 
 
 ## Workflow
-- You can input a customer id into the UI and click “Generate Invoice”
+- You can input a customer id into the UI and click *Create Invoice*
 - A HTTP Request calls the REST-based API
 - The application starts a new data gathering job
-- When the data is gathered, it gets send to the PDF generator
+- When the data is gathered, it gets sent to the PDF generator
 - The PDF generator generates the invoice and saves it on the file system
-- The UI checks every couple seconds if the invoice is available
+- Upon clicking *Show Status* it shows various information on the response and displays a download link to the PDF.
 
 
 ## Specifications
@@ -81,4 +81,10 @@ Unit Tests - Can Oezalp
 
 
 ## Unit Testing decisions
-Due to the 
+We have decided to test the repository in Data_Collection_Dispatcher service. Since this is the start of the whole data flow
+it is essential, that it correctly returns all the stations it has as well as returns the correct number of stations.
+
+Additionally we have tested the *isNumeric* method in DataCollectionDispatcherApp. Which is there to ensure we are receiving a number as the customerId.
+For that method we tested the cases: 	- It receives a numeric string (should return true)
+										- It receives a non-numeric string (should return false)
+										- It receives a mixed string (should return false)
