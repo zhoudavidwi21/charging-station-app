@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
@@ -26,8 +27,11 @@
     </Label>
     <Button fx:id="createInvoiceButton" layoutX="241.0" layoutY="67.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="173.0" text="Create invoice" />
     <Button fx:id="statusInvoiceButton" layoutX="428.0" layoutY="67.0" mnemonicParsing="false" prefHeight="34.0" prefWidth="191.0" text="Show Status" />
-    <Button fx:id="closeButton" layoutX="241.0" layoutY="185.0" minWidth="32.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="129.0" text="Close App">
-    </Button>
+    <Button fx:id="closeButton" layoutX="489.0" layoutY="187.0" minWidth="32.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="129.0" text="Close App" />
     <Label fx:id="statusLabel" layoutX="241.0" layoutY="106.0" prefHeight="74.0" prefWidth="391.0">
     </Label>
+    <Label fx:id="responseLabel" layoutX="241.0" layoutY="188.0" prefHeight="28.0" prefWidth="159.0" text="">
+        <Hyperlink fx:id="responseLink" disable="true" layoutX="213.0" layoutY="300.0" prefWidth="200.0" />
+    </Label>
+
 </AnchorPane>

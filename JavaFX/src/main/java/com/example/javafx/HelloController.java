@@ -2,6 +2,7 @@ package com.example.javafx;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import org.apache.http.HttpEntity;
@@ -14,7 +15,10 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
+import java.awt.Desktop;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class HelloController {
 
@@ -32,6 +36,9 @@ public class HelloController {
 
     @FXML
     private Label statusLabel;
+
+    @FXML
+    public Label responseLabel;
 
     private static final String BASE_URL = "http://localhost:8080/invoices/";
 
@@ -107,6 +114,8 @@ public class HelloController {
                 // Successfully downloaded
                 if (responseEntity != null) {
                     updateStatusLabel(responseString);
+                    String filePath = "file://C:/Users/Public/" ; // Set the file path accordingly
+                    addResponseLink(filePath);
                 }
             } else if (statusCode == 404) {
                 updateStatusLabel(responseString);
@@ -121,8 +130,28 @@ public class HelloController {
         }
     }
 
-    public void updateStatusLabel(String message) {
-        statusLabel.setText(message);
+    public void addResponseLink(String filePath) {
+        if (filePath != null) {
+            Hyperlink responseLink = new Hyperlink(filePath);
+            responseLink.setOnAction(event -> {
+                // Aktion, die ausgeführt werden soll, wenn der Link angeklickt wird
+                // Zum Beispiel den Link in einem Webbrowser öffnen oder den Download starten
+                // Hier ist ein Beispiel, wie Sie den Link in einem Webbrowser öffnen können
+                try {
+                    Desktop.getDesktop().browse(new URI(filePath));
+                } catch (IOException | URISyntaxException e) {
+                    e.printStackTrace();
+                    // Fehlerbehandlung, falls der Link nicht geöffnet werden kann
+                }
+            });
+            responseLabel.setGraphic(responseLink);
+        } else {
+            responseLabel.setGraphic(null);
+        }
     }
 
+        public void updateStatusLabel (String message){
+            statusLabel.setText(message);
+        }
 }
+
