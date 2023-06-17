@@ -1,4 +1,7 @@
 # charging-station-app
+*[Github Link](https://github.com/zhoudavidwi21/charging-station-app)* 
+
+_Here as a seperate link as well: (https://github.com/zhoudavidwi21/charging-station-app)_
 
 ## Purpose
 This app uses a microservice architecture to get invoices from customers of various charging stations across the city.
@@ -31,9 +34,16 @@ These are:
 	
 The REST API and the services in the backend communicate via a messaging queue (rabbitMQ).
 
+### UML Diagram
+To further demonstrate the data flow we have shown a rough reprensentation of our application as an UML Diagram.
+
+![UML Diagram displaying the communication and data flow between the different services](./Documents/UML_FuelStation.png)
+
 ## Responsibilities
 JavaFX - Martin Frischmann
 
 SpringBootApplication/REST - Can Oezalp
 
 Backend Services - David Zhou
+
+Unit Tests - Can Oezalp
