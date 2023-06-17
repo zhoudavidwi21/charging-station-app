@@ -1,5 +1,5 @@
 # charging-station-app
-** [Github Link](https://github.com/zhoudavidwi21/charging-station-app) **
+[Github Link](https://github.com/zhoudavidwi21/charging-station-app)
 
 * Here as a seperate link as well: (https://github.com/zhoudavidwi21/charging-station-app) *
 
@@ -24,12 +24,12 @@ It generates an invoice PDF for a given customer.
 
 
 ## Workflow
-- You can input a customer id into the UI and click “Generate Invoice”
+- You can input a customer id into the UI and click *Create Invoice*
 - A HTTP Request calls the REST-based API
 - The application starts a new data gathering job
-- When the data is gathered, it gets send to the PDF generator
+- When the data is gathered, it gets sent to the PDF generator
 - The PDF generator generates the invoice and saves it on the file system
-- The UI checks every couple seconds if the invoice is available
+- Upon clicking *Show Status* it shows various information on the response and displays a download link to the PDF.
 
 
 ## Specifications

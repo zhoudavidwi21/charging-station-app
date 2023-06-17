@@ -1,7 +1,7 @@
 # charging-station-app
-** [Github Link](https://github.com/zhoudavidwi21/charging-station-app) **
+[Github Link](https://github.com/zhoudavidwi21/charging-station-app)
 
-* Here as a seperate link as well: (https://github.com/zhoudavidwi21/charging-station-app) *
+- *Here as a seperate link as well:* (https://github.com/zhoudavidwi21/charging-station-app) 
 
 
 ## Setup/Installation
