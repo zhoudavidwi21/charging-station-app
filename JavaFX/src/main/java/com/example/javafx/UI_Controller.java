@@ -15,12 +15,11 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.awt.Desktop;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 
-public class HelloController {
+public class UI_Controller {
 
     @FXML
     private TextField customerIdField;
@@ -38,7 +37,7 @@ public class HelloController {
     private Label statusLabel;
 
     @FXML
-    public Label responseLabel;
+    private Label responseLabel;
 
     private static final String BASE_URL = "http://localhost:8080/invoices/";
 
@@ -70,7 +69,7 @@ public class HelloController {
             // Set JSON payload as request body
             String payload = "{\"customerId\": \"" + customerId + "\"}";
 
-            // JSON-Payload als Request-Body setzen
+            // Set JSON payload as request body
             HttpEntity requestEntity = new StringEntity(payload, ContentType.APPLICATION_JSON);
             httpPost.setEntity(requestEntity);
 
@@ -87,8 +86,7 @@ public class HelloController {
                 updateStatusLabel(responseString);
             } else {
                 // Error occurred
-                updateStatusLabel("Please enter a customer-ID!");
-
+                updateStatusLabel("Please enter a customer ID!");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,13 +112,12 @@ public class HelloController {
                 // Successfully downloaded
                 if (responseEntity != null) {
                     updateStatusLabel(responseString);
-                    String filePath = "file://C:/Users/Public/" ; // Set the file path accordingly
+                    String filePath = "C:/Users/Public/customer_" + customerId + ".pdf"; // Set the file path accordingly
                     addResponseLink(filePath);
                 }
             } else if (statusCode == 404) {
                 updateStatusLabel(responseString);
-            }   else
-            {
+            } else {
                 // Error occurred
                 updateStatusLabel(responseString);
             }
@@ -134,14 +131,13 @@ public class HelloController {
         if (filePath != null) {
             Hyperlink responseLink = new Hyperlink(filePath);
             responseLink.setOnAction(event -> {
-                // Aktion, die ausgeführt werden soll, wenn der Link angeklickt wird
-                // Zum Beispiel den Link in einem Webbrowser öffnen oder den Download starten
-                // Hier ist ein Beispiel, wie Sie den Link in einem Webbrowser öffnen können
+                // Action to be performed when the link is clicked on
                 try {
-                    Desktop.getDesktop().browse(new URI(filePath));
-                } catch (IOException | URISyntaxException e) {
+                    File file = new File(filePath);
+                    Desktop.getDesktop().open(file);
+                } catch (IOException e) {
                     e.printStackTrace();
-                    // Fehlerbehandlung, falls der Link nicht geöffnet werden kann
+                    // Error handling if the file cannot be opened
                 }
             });
             responseLabel.setGraphic(responseLink);
@@ -150,8 +146,7 @@ public class HelloController {
         }
     }
 
-        public void updateStatusLabel (String message){
-            statusLabel.setText(message);
-        }
+    public void updateStatusLabel(String message) {
+        statusLabel.setText(message);
+    }
 }
-

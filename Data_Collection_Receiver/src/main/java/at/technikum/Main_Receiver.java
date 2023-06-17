@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
-public class Main {
+public class Main_Receiver {
     public static void main(String[] args) throws SQLException, IOException, TimeoutException {
         DataCollectionReceiverApp app = new DataCollectionReceiverApp(
                 new CustomersRepository(new PostgreSQLDatabase()));

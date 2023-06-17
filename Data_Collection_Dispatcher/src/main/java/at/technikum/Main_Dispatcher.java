@@ -4,10 +4,7 @@ import at.technikum.repository.PostgreSQLDatabase;
 import at.technikum.repository.StationsRepository;
 import at.technikum.service.DataCollectionDispatcherApp;
 
-
-import java.util.Objects;
-
-public class Main {
+public class Main_Dispatcher {
     public static void main(String[] args) throws Exception {
         DataCollectionDispatcherApp app = new DataCollectionDispatcherApp(
                 new StationsRepository(new PostgreSQLDatabase()));

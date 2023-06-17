@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeoutException;
@@ -62,8 +61,8 @@ public class DataGatheringController {
     @GetMapping("/{customerId}")
     public ResponseEntity<byte[]> getInvoice(@PathVariable("customerId") String customerId) throws IOException {
         String fileName = "customer_" + customerId + ".pdf";
-        final String OUTPUT_DIRECTORY = Paths.get(System.getProperty("user.home"), "..", "Public").toString();
-        String filePath = OUTPUT_DIRECTORY + "\\" + fileName;
+        final String OUTPUT_DIRECTORY = "C:/Users/Public".toString();
+        String filePath = OUTPUT_DIRECTORY + "/" + fileName;
 
         File file = new File(filePath);
         if (file.exists()) {
@@ -71,11 +70,12 @@ public class DataGatheringController {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formattedCreationDate = dateFormat.format(creationDate);
             String response = "Invoice PDF for customer ID: " + customerId
-                    + "\nDownload Link: " + filePath
+                    + "\nLink: " + filePath
                     + "\nCreation Date: " + formattedCreationDate;
             return ResponseEntity.ok(response.getBytes());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(("Invoice not available for customer ID: " + customerId).getBytes());
         }
     }
+
 }
