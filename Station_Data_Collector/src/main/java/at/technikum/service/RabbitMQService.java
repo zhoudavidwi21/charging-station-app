@@ -30,12 +30,13 @@ public class RabbitMQService implements MessagingQueue, AutoCloseable {
         channel.basicPublish("", queueName, new AMQP.BasicProperties.Builder().contentType(CONTENT_TYPE_JSON).build(),
                 message.getBytes());
         System.out.println("Sent \""+ message + "\" to queue: " + queueName);
+        System.out.println("------------------------------------------------------------------------------------");
+        System.out.println("Waiting for messages. To exit press CTRL+C");
     }
 
     @Override
     public void consume(String queueName) throws IOException {
         channel.queueDeclare(queueName, false, false, false, null);
-        System.out.println("Waiting for messages...");
         // Create a consumer to handle incoming messages
         Consumer consumer = new DefaultConsumer(channel) {
             @Override

@@ -31,6 +31,8 @@ public class RabbitMQService implements MessagingQueue, AutoCloseable {
         channel.basicPublish("", queueName, new AMQP.BasicProperties.Builder().contentType(CONTENT_TYPE_JSON).build(),
                 message.getBytes());
         System.out.println("Sent \""+ message + "\" to queue: " + queueName);
+        System.out.println("------------------------------------------------------------------------------------");
+        System.out.println("Waiting for messages. To exit press CTRL+C");
     }
 
     @Override
