@@ -6,8 +6,8 @@
 
 ## Setup/Installation
 To set this application up you need to just simply download and extract the zip.
-Make sure you have the `docker-compose up` running. 
-> **_NOTE:_**  The docker files may or may not be included in this repository. (@lecturer: Probably is included in the zip)
+Make sure you have the docker containers running. (`docker-compose up`) 
+> **_NOTE:_**  The docker files are not included in this repository.
 
 You will need to open the JavaFX folder in your IDE and start the application.
 You will need to open the SpringBootApp folder in your IDE and start the application.
@@ -88,3 +88,6 @@ Additionally we have tested the *isNumeric* method in DataCollectionDispatcherAp
 For that method we tested the cases: 	- It receives a numeric string (should return true)
 										- It receives a non-numeric string (should return false)
 										- It receives a mixed string (should return false)
+
+## Personal Documentation
+In the *Documents* folder you can find the UML Diagram as well as the personal documentation of each member.
