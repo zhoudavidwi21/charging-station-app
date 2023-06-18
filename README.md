@@ -1,4 +1,6 @@
 # charging-station-app
+*Group O*
+Team members: Martin Frischmann, Can Oezalp, David Zhou
 [Github Link](https://github.com/zhoudavidwi21/charging-station-app)
 
 - *Here as a seperate link as well:* (https://github.com/zhoudavidwi21/charging-station-app) 
